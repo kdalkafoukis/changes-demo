@@ -1,8 +1,6 @@
 function setup() {
-    const bounds = [
-        [-1.8571313, 51.5637044],
-        [-1.7847632, 51.6087468]
-    ]
+    const centre = [-1.8231, 51.5989]
+    const terrain = 'data/su18nw.bil'
     const topographies = [
         'data/9022-SU1085-5c963',
         'data/10277-SU1085-5c963',
@@ -55,11 +53,11 @@ function setup() {
         'data/1548350-SU1085-5c963',
         'data/1592959-SU1085-5c963'
     ]
-    load(bounds, topographies)
+    load(centre, topographies)
 }
 
-function load(bounds, topographies) {
-    render(bounds)
+function load(centre, topographies) {
+    render(centre)
         .then(display => {
             topographies.map(display.add)
             rotate(display, topographies, 2)
@@ -67,7 +65,7 @@ function load(bounds, topographies) {
         .catch(console.error)
 }
 
-function render(bounds) {
+function render(centre) {
     const sources = {
         'terrain': {
             type: 'raster-dem',
@@ -91,7 +89,10 @@ function render(bounds) {
     const renderer = new mapboxgl.Map({
         style: { version: 8, sources, layers },
         container: document.querySelector('main'),
-        maxBounds: bounds
+        center: centre,
+        zoom: 14.44,
+        minZoom: 12,
+        maxZoom: 16
     })
     document.querySelector('.mapboxgl-missing-css').remove() // hack
     const add = topography => {
