@@ -1,14 +1,14 @@
 
-# Converts MasterMap Topography Layer files (Gzipped) in the data directory into vector tiles in the tiles directory.
+# Converts MasterMap Topography Layer files (Gzipped) in the input directory into vector tiles in the data directory.
 # Requires Gdal and Tippecanoe.
 # Use Make with -j to run multiple jobs at once.
 
-heights = data/su18nw_bldgHts.csv
+heights = input/su18nw_bldgHts.csv
 
-tiles: $(addprefix tiles/, $(notdir $(basename $(wildcard data/*.gz))))
+data: $(addprefix data/, $(notdir $(basename $(wildcard input/*.gz))))
 
-tiles/%: %.geo.json
-	mkdir -p tiles
+data/%: %.geo.json
+	mkdir -p data
 	tippecanoe \
 		--no-feature-limit \
 		--no-tile-size-limit \
@@ -55,36 +55,9 @@ tiles/%: %.geo.json
 		-sql 'UPDATE geo SET abshmax = (SELECT CAST(heights.abshmax AS DECIMAL) FROM heights WHERE heights.toid = geo.fid)' \
 		$@
 
-%.gml: data/%.gz
+%.gml: input/%.gz
 	gzip \
 		--decompress \
 		--to-stdout \
 		$< \
-		> $@
-
-tiles/%.bil: %.geo.tiff
-	mkdir -p tiles
-	gdal_translate \
-		-of envi \
-		-ot uint16 \
-		-scale 80 150 0 255 \
-		-outsize 501 501 \
-		$< \
-		$@
-	rm $@.aux.xml
-	rm $(basename $@).hdr
-
-%.geo.tiff: %.asc
-	gdalwarp \
-		-of gtiff \
-		-s_srs 'EPSG:27700' \
-		-t_srs 'EPSG:4326' \
-		$< \
-		$@
-
-%.asc: data/%.zip
-	unzip \
-		-p \
-		$< \
-		'*.asc' \
 		> $@
