@@ -300,6 +300,7 @@ function style(topography) {
 function rotate(display, topographies, time, number) {
     const i = number || 0
     display.show(topographies[i])
+    document.querySelector('[type=range]').value = (i / topographies.length) * 1000
     const next = i + 1 < topographies.length ? i + 1 : 0
     setTimeout(() => rotate(display, topographies, time, next), time * 1000)
 }
