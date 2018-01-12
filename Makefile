@@ -1,14 +1,14 @@
 
-# Converts MasterMap Topography Layer files (Gzipped) in the input directory into vector tiles in the data directory.
+# Converts MasterMap Topography Layer files (Gzipped) in the sources directory into vector tiles in the topography directory.
 # Requires Gdal and Tippecanoe.
 # Use Make with -j to run multiple jobs at once.
 
-heights = input/su18nw_bldgHts.csv
+heights = sources/su18nw_bldgHts.csv
 
-data: $(addprefix data/, $(notdir $(basename $(wildcard input/*.gz))))
+topography: $(addprefix topography/, $(notdir $(basename $(wildcard sources/*.gz))))
 
-data/%: %.geo.json
-	mkdir -p data
+topography/%: %.geo.json
+	mkdir -p topography
 	tippecanoe \
 		--no-feature-limit \
 		--no-tile-size-limit \
@@ -55,7 +55,7 @@ data/%: %.geo.json
 		-sql 'UPDATE geo SET abshmax = (SELECT CAST(heights.abshmax AS DECIMAL) FROM heights WHERE heights.toid = geo.fid)' \
 		$@
 
-%.gml: input/%.gz
+%.gml: sources/%.gz
 	gzip \
 		--decompress \
 		--to-stdout \

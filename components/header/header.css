@@ -1,0 +1,18 @@
+header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background: white;
+}
+
+header img {
+    float: right;
+    margin: 20px;
+}
+
+header h1 {
+    margin: 16px 24px;
+    color: #2f2f2f;
+    font-size: 24px;
+    font-weight: normal;
+}
