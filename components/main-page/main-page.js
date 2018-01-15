@@ -77,6 +77,7 @@ export default class MainPage extends React.Component {
             'data/1592959-SU1085-5c963'
         ]
         this.setState({ centre, zoom, topographyList })
+        this.togglePlay()
     }
 
     togglePlay() {
