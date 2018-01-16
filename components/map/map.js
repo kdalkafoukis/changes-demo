@@ -20,7 +20,7 @@ export default class Map extends React.Component {
         const sources = {
             'terrain': {
                 type: 'raster-dem',
-                tiles: ['https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=']
+                tiles: [window.location.href + 'terrain/{z}/{x}/{y}.png']
             }
         }
         const layers = [
