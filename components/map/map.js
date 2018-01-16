@@ -54,11 +54,11 @@ export default class Map extends React.Component {
     }
 
     add(topography) {
-        this.renderer.addSource(topography, {
+        this.renderer.addSource(topography.data, {
             type: 'vector',
-            tiles: [window.location.href + topography + '/{z}/{x}/{y}.pbf']
+            tiles: [window.location.href + topography.data + '/{z}/{x}/{y}.pbf']
         })
-        this.style(topography).forEach(layer => {
+        this.style(topography.data).forEach(layer => {
             this.renderer.addLayer(layer)
             this.renderer.setLayoutProperty(layer.id, 'visibility', 'none')
             this.renderer.moveLayer('hillshading')
@@ -238,7 +238,7 @@ export default class Map extends React.Component {
 
     show(id) {
         const topography = this.props.topographyList[id]
-        const current = this.style(topography).map(layer => layer.id)
+        const current = this.style(topography.data).map(layer => layer.id)
         const previous = Object.keys(this.renderer.style._layers).filter(layer => {
             return !current.concat(['background', 'hillshading']).includes(layer)
         })
