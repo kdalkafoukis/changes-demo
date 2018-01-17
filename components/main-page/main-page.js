@@ -90,7 +90,7 @@ export default class MainPage extends React.Component {
 
     loop() {
         if (!this.state.playing) return
-        const next = this.state.topographySelected + 1 < this.state.topographyList.length ? this.state.topographySelected + 1 : 0
+        const next = this.state.topographySelected < this.state.topographyList.length - 1 ? this.state.topographySelected + 1 : 0
         this.setState({ topographySelected: next })
         setTimeout(this.loop, 4 * 1000) // in milliseconds
     }

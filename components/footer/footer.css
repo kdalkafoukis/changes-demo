@@ -65,7 +65,7 @@ footer div [type=range] {
     appearance: none;
     -webkit-appearance: none;
     position: absolute;
-    background: 0 / calc((100% / 7) + 1px) repeating-linear-gradient(to right, transparent, transparent calc(100% - 2px), white calc(100% - 1px), white 100%);
+    background: 0 / calc((100% / 5) + 1px) repeating-linear-gradient(to right, transparent, transparent calc(100% - 2px), white calc(100% - 1px), white 100%);
     width: calc(100% - 104px);
     height: 20px;
     margin: 22px 0;
@@ -80,7 +80,7 @@ footer div [type=range]::before {
     display: block;
     width: 100%;
     height: 10px;
-    background: calc(100% / 12) / calc((100% / 7) + 1px) repeating-linear-gradient(to right, transparent, transparent calc(100% - 2px), #8b949f calc(100% - 1px), #8b949f 100%);
+    background: calc(100% / 8) / calc((100% / 5) + 1px) repeating-linear-gradient(to right, transparent, transparent calc(100% - 2px), #8b949f calc(100% - 1px), #8b949f 100%);
     margin-top: 5px;
 }
 
