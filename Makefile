@@ -1,8 +1,3 @@
-
-# Converts MasterMap Topography Layer files (Gzipped) in the sources directory into vector tiles in the topography directory.
-# Requires Gdal and Tippecanoe.
-# Use Make with -j to run multiple jobs at once.
-
 heights = sources/su18nw_bldgHts.csv
 
 topography: $(addprefix topography/, $(notdir $(basename $(wildcard sources/*.gz))))
