@@ -56,3 +56,31 @@ topography/%: %.geo.json
 		--to-stdout \
 		$< \
 		> $@
+
+terrain: $(addsuffix .mbtiles, $(notdir $(basename $(wildcard sources/*.zip))))
+	mb-util \
+		$< \
+		$@
+
+%.mbtiles: %.geo.tiff
+	rio rgbify \
+		--interval 0.01 \
+		--min-z 12 \
+		--max-z 16 \
+		$< \
+		$@
+
+%.geo.tiff: %.asc
+	gdalwarp \
+		-of gtiff \
+		-s_srs 'EPSG:27700' \
+		-t_srs 'EPSG:3857' \
+		$< \
+		$@
+
+%.asc: sources/%.zip
+	unzip \
+		-p \
+		$< \
+		'*.asc' \
+		> $@
