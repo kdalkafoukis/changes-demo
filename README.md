@@ -1,7 +1,7 @@
 Changes demo
 ============
 
-Demonstrates how frequently OS data is updated.
+Demonstrates how frequently OS data is updated. [See it here.](https://geovation.github.io/changes-demo)
 
 Development
 -----------
