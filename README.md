@@ -6,11 +6,9 @@ Demonstrates how frequently OS data is updated. [See it here.](https://geovation
 Development
 -----------
 
-There is no build process, and everything can be served statically from the root directory.
+There is no build process, and everything can be served statically from the root directory. One way to do this is with [Live Server](https://github.com/tapio/live-server):
 
-One way to do this is with [Live Server](https://github.com/tapio/live-server). Since the demo uses the [MapboxGL](https://github.com/mapbox/mapbox-gl-js) library, which requires [Mapbox Vector Tiles](https://www.mapbox.com/vector-tiles) (in Protobuf format) to be served with GZip headers, we need pass requests through the included `gzip-pbfs.js` middleware:
-
-    $ live-server --middleware="$(pwd)/gzip-pbfs.js" --port=8000
+    $ live-server --port=8000
 
 ### Building topography tiles
 

@@ -7,6 +7,7 @@ topography/%: %.geo.json
 	tippecanoe \
 		--no-feature-limit \
 		--no-tile-size-limit \
+		--no-tile-compression \
 		--minimum-zoom 12 \
 		--maximum-zoom 16 \
 		--layer $(basename $@) \
@@ -51,8 +52,7 @@ topography/%: %.geo.json
 		$@
 
 %.gml: sources/%.gz
-	gzip \
-		--decompress \
+	gunzip \
 		--to-stdout \
 		$< \
 		> $@
@@ -82,5 +82,4 @@ terrain: $(addsuffix .mbtiles, $(notdir $(basename $(wildcard sources/*.zip))))
 	unzip \
 		-p \
 		$< \
-		'*.asc' \
 		> $@
