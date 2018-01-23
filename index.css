@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
-@import url('/components/header/header.css');
-@import url('/components/footer/footer.css');
-@import url('/components/map/map.css');
+@import url('components/header/header.css');
+@import url('components/footer/footer.css');
+@import url('components/map/map.css');
 
 body {
     margin: 0;

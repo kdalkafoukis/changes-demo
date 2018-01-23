@@ -11,4 +11,4 @@ System.config({
     transpiler: 'systemjs-plugin-babel'
 })
 
-System.import('/components/routes.js').catch(console.error)
+System.import('components/routes.js').catch(console.error)

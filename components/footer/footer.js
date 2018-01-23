@@ -28,7 +28,7 @@ export default class Footer extends React.Component {
     }
 
     render() {
-        const icon = this.props.playing ? '/components/footer/button-pause.svg' : '/components/footer/button-play.svg'
+        const icon = this.props.playing ? 'components/footer/button-pause.svg' : 'components/footer/button-play.svg'
         const update = event => {
             this.set(event.target.value)
         }

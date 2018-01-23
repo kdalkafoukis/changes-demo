@@ -1,8 +1,8 @@
 import React from 'react'
 import HTML from 'react-dom-factories'
-import Header from '/components/header/header.js'
-import Footer from '/components/footer/footer.js'
-import Map from '/components/map/map.js'
+import Header from 'components/header/header.js'
+import Footer from 'components/footer/footer.js'
+import Map from 'components/map/map.js'
 
 export default class MainPage extends React.Component {
 

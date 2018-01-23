@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import MainPage from '/components/main-page/main-page.js'
+import MainPage from 'components/main-page/main-page.js'
 
 const main = document.querySelector('main')
 const page = React.createElement(MainPage)
