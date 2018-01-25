@@ -13,7 +13,7 @@ export default class Footer extends React.Component {
     }
 
     set(value) {
-        const selected = Math.ceil((value / 1000) * this.props.total) - 1
+        const selected = Math.floor((value / 1000) * this.props.total)
         this.props.set(selected)
         this.receive(value)
     }
