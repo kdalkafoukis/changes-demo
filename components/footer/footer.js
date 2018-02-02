@@ -15,6 +15,7 @@ export default class Footer extends React.Component {
     set(value) {
         const selected = Math.floor((value / 1000) * this.props.total)
         this.props.set(selected)
+        this.props.play(false)
         this.receive(value)
     }
 
@@ -29,13 +30,16 @@ export default class Footer extends React.Component {
 
     render() {
         const icon = this.props.playing ? 'components/footer/button-pause.svg' : 'components/footer/button-play.svg'
+        const play = event => {
+            this.props.play()
+        }
         const update = event => {
             this.set(event.target.value)
         }
         return HTML.footer({}, ...[
             HTML.h2({}, 'Month ' + this.props.title),
             HTML.div({}, ...[
-                HTML.button({ className: 'play', onClick: this.props.play }, HTML.img({ src: icon })),
+                HTML.button({ className: 'play', onClick: play }, HTML.img({ src: icon })),
                 HTML.input({ type: 'range', min: 0, max: 1000, value: this.state.value, onChange: update })
             ])
         ])

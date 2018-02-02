@@ -72,6 +72,7 @@ footer div [type=range] {
     border-left: 1px solid white;
     border-right: 1px solid white;
     outline: none;
+    cursor: col-resize;
 }
 
 footer div [type=range]::before {

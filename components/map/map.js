@@ -14,6 +14,7 @@ export default class Map extends React.Component {
         this.add = this.add.bind(this)
         this.style = this.style.bind(this)
         this.show = this.show.bind(this)
+        this.whenMapStyleLoaded = this.whenMapStyleLoaded.bind(this)
     }
 
     display() {
@@ -245,11 +246,16 @@ export default class Map extends React.Component {
         current.forEach(id => {
             this.renderer.setLayoutProperty(id, 'visibility', 'visible')
         })
-        setTimeout(() => { // add a short delay to ensure new topography is loaded first
+        this.whenMapStyleLoaded(() => {
             previous.forEach(id => {
                 this.renderer.setLayoutProperty(id, 'visibility', 'none')
             })
-        }, 1 * 1000)
+        })
+    }
+
+    whenMapStyleLoaded(func) {
+        if (this.renderer.isStyleLoaded()) func()
+        else setTimeout(() => this.whenMapStyleLoaded(func), 1)
     }
 
     componentDidMount() {
