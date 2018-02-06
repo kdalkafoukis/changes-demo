@@ -37,7 +37,7 @@ export default class Footer extends React.Component {
             this.set(event.target.value)
         }
         return HTML.footer({}, ...[
-            HTML.h2({}, 'Month ' + this.props.title),
+            HTML.h2({}, this.props.title),
             HTML.div({}, ...[
                 HTML.button({ className: 'play', onClick: play }, HTML.img({ src: icon })),
                 HTML.input({ type: 'range', min: 0, max: 1000, value: this.state.value, onChange: update })
