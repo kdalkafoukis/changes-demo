@@ -238,6 +238,10 @@ export default class Map extends React.Component {
     }
 
     show(id) {
+        if(this.timeout_styleloaded) {
+          clearTimeout(this.timeout_styleloaded)
+        }
+
         const topography = this.props.topographyList[id]
         const current = this.style(topography.data).map(layer => layer.id)
         const previous = Object.keys(this.renderer.style._layers).filter(layer => {
@@ -251,7 +255,6 @@ export default class Map extends React.Component {
                 this.renderer.setLayoutProperty(id, 'visibility', 'none')
             })
         })
-        clearTimeout(this.timeout_styleloaded)
     }
 
     whenMapStyleLoaded(func) {
