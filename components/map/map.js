@@ -11,10 +11,11 @@ export default class Map extends React.Component {
             loaded: false
         }
         this.display = this.display.bind(this)
-        this.add = this.add.bind(this)
+        this.pushSelected = this.pushSelected.bind(this)
         this.style = this.style.bind(this)
-        this.show = this.show.bind(this)
         this.whenMapStyleLoaded = this.whenMapStyleLoaded.bind(this)
+        this.newLayers = []
+        this.toDeleteLayers = []
     }
 
     display() {
@@ -48,22 +49,41 @@ export default class Map extends React.Component {
         })
         document.querySelector('.mapboxgl-missing-css').remove() // hack
         this.renderer.on('load', () => {
-            this.props.topographyList.map(this.add)
-            this.show(this.props.topographySelected)
+            this.pushSelected()
             this.setState({ loaded: true })
         })
+
+        this.renderer.on("render", (e) => {
+            this.lastRendered = Date.now()
+        })
+
     }
 
-    add(topography) {
-        this.renderer.addSource(topography.data, {
+    pushSelected() {
+        const topography = this.props.topographyList[this.props.topographySelected]
+
+        if (!this.renderer.getSource(topography.data)) {
+          this.renderer.addSource(topography.data, {
             type: 'vector',
             tiles: [window.location.href + topography.data + '/{z}/{x}/{y}.pbf']
-        })
+          })
+        }
+
         this.style(topography.data).forEach(layer => {
-            this.renderer.addLayer(layer)
-            this.renderer.setLayoutProperty(layer.id, 'visibility', 'none')
-            this.renderer.moveLayer('hillshading')
+          this.newLayers.push(layer.id)
+          this.renderer.addLayer(layer)
+          this.renderer.moveLayer('hillshading')
         })
+
+        this.whenMapStyleLoaded(() => {
+            this.toDeleteLayers.forEach((id) => {
+                this.renderer.removeLayer(id)
+            })
+
+            this.toDeleteLayers = this.newLayers
+            this.newLayers = []
+        })
+
     }
 
     style(topography) {
@@ -237,25 +257,19 @@ export default class Map extends React.Component {
         ]
     }
 
-    show(id) {
-        const topography = this.props.topographyList[id]
-        const current = this.style(topography.data).map(layer => layer.id)
-        const previous = Object.keys(this.renderer.style._layers).filter(layer => {
-            return !current.concat(['background', 'hillshading']).includes(layer)
-        })
-        current.forEach(id => {
-            this.renderer.setLayoutProperty(id, 'visibility', 'visible')
-        })
-        this.whenMapStyleLoaded(() => {
-            previous.forEach(id => {
-                this.renderer.setLayoutProperty(id, 'visibility', 'none')
-            })
-        })
-    }
-
     whenMapStyleLoaded(func) {
-        if (this.renderer.isStyleLoaded()) func()
-        else setTimeout(() => this.whenMapStyleLoaded(func), 1)
+        if (this.timeoutMapLoaded) {
+            clearTimeout(this.timeoutMapLoaded)
+        }
+
+        const now = Date.now()
+        // workaround hack from https://github.com/Eddie-Larsson/mapbox-print-pdf/issues/1
+        if (this.lastRendered && this.renderer.isStyleLoaded() && now > this.lastRendered + 800 ) {
+            func()
+        }
+        else {
+            this.timeoutMapLoaded = setTimeout(() => this.whenMapStyleLoaded(func), 10)
+        }
     }
 
     componentDidMount() {
@@ -264,7 +278,7 @@ export default class Map extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (this.state.loaded && prevProps.topographySelected !== this.props.topographySelected) {
-            this.show(this.props.topographySelected)
+          this.pushSelected()
         }
     }
 
