@@ -29,7 +29,7 @@ export default class Map extends React.Component {
                 id: 'background',
                 type: 'background',
                 paint: {
-                    'background-color': '#444',
+                    'background-color': '#fffeca',
                 }
             },
             {
@@ -55,12 +55,6 @@ export default class Map extends React.Component {
             this.setState({ loaded: true })
         })
 
-        this.renderer.on('sourcedata', (e) => {
-          if(e.isSourceLoaded ){
-            this.previous.forEach(id => this.renderer.setLayoutProperty(id, 'visibility', 'none'))
-            this.props.setItIsStillRendering(false)
-          }
-        })
     }
 
     add = (topography) => {
@@ -233,15 +227,11 @@ export default class Map extends React.Component {
                 'source-layer': topography,
                 'filter': [
                     'has',
-                    'abshmax'
+                    'height'
                 ],
                 'paint': {
                     'fill-extrusion-color': '#fecb9a',
-                    'fill-extrusion-height': [
-                        '-',
-                        ['get', 'abshmax'],
-                        ['get', 'abshmin']
-                    ],
+                    'fill-extrusion-height': ['get', 'height'],
                 }
             }
         ]
@@ -257,6 +247,26 @@ export default class Map extends React.Component {
         current.forEach(id => {
             this.renderer.setLayoutProperty(id, 'visibility', 'visible')
         })
+
+        this.whenMapStyleLoaded(() => {
+            this.props.setItIsStillRendering(false)
+            this.previous.forEach(id => {
+                this.renderer.setLayoutProperty(id, 'visibility', 'none')
+            })
+        })
+
+    }
+
+    whenMapStyleLoaded(func) {
+        if (this.requestFrame) {
+            cancelAnimationFrame(this.requestFrame)
+        }
+        if (this.renderer.isStyleLoaded()) {
+          func()
+        }
+        else {
+            this.requestFrame = requestAnimationFrame(()=>this.whenMapStyleLoaded(func))
+        }
     }
 
     componentDidMount() {
